@@ -12,21 +12,18 @@ function onSubmitForm(evt) {
     step: evt.target.elements.step.value,
     amount: evt.target.elements.amount.value,
   };
-  const promiseArray = [];
+
   for (let i = 0; i < formData.amount; i++) {
     let actualDelay = i * formData.step;
     actualDelay += Number(formData.delay);
-    promiseArray.push(createPromise(i + 1, actualDelay));
-  }
-  setTimeout(() => {
-    promiseArray.map(e => {
-      e.then(({ position, delay }) => {
+    createPromise(i + 1, actualDelay)
+      .then(({ position, delay }) => {
         Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
-      }).catch(({ position, delay }) => {
+      })
+      .catch(({ position, delay }) => {
         Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
       });
-    });
-  }, formData.delay);
+  }
 }
 
 function createPromise(position, delay) {

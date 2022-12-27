@@ -45,6 +45,7 @@ flatpickr('input#datetime-picker', options);
 function onClickStartTimer() {
   const actualTimerValue = selectedValidDate - Date.now();
   refs.btnSetTime.disabled = true;
+  refs.inputData.disabled = true;
 
   let idInterval = setInterval(() => {
     const actualTimerValue = selectedValidDate - Date.now();
@@ -52,15 +53,17 @@ function onClickStartTimer() {
     const { days, hours, minutes, seconds } = convertMs(actualTimerValue);
     const actualDateArray = [days, hours, minutes, seconds];
 
-    refs.timer.map((e, i) => {
+    refs.timer.forEach((e, i) => {
       e.textContent = addLeadingZero(actualDateArray[i]);
     });
     if (actualTimerValue <= 0) {
       clearInterval(idInterval);
       Report.success('The timer has finished', '', 'Okay');
-      refs.timer.map(e => {
+      refs.timer.forEach(e => {
         e.textContent = addLeadingZero(0);
       });
+      refs.btnSetTime.disabled = false;
+      refs.inputData.disabled = false;
     }
   }, 1000);
 }
